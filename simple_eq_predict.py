@@ -32,7 +32,7 @@ dataset = pd.read_csv('dataset/dataset.csv')
 x = dataset['input_x']
 y = dataset['output_y']
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=validation_size)
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=validation_size)
 
 
 #################
@@ -45,14 +45,14 @@ model = Sequential([
 
 model.compile(optimizer = 'adam', loss = 'mean_squared_error')
 
-model.fit(x_train, y_train, batch_size = batch_size, epochs = epochs)
+model.fit(X_train, y_train, batch_size = batch_size, epochs = epochs)
 
 # weight = 1, bias = 2
 # The model multiplies the input by the weight (1) and adds the bias at the end (2), resulting in x+2 = y.
 weights, bias = model.layers[0].get_weights()
 print(f"Weights: {weights}, bias: {bias}")
 
-predicts = model.predict(x_test)
+predicts = model.predict(X_test)
 
 precision = accuracy_score(y_test, predicts) * 100
 print(f"Model accuracy: {precision}")
