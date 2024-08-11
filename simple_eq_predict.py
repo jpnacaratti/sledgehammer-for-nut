@@ -12,34 +12,47 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-dataset = pd.read_csv('dataset.csv')
+
+##############
+# Parameters #
+##############
+
+neurons = 1
+epochs = 15
+batch_size = 1
+validation_size = 0.2
+
+
+#####################
+# Creating datasets #
+#####################
+
+dataset = pd.read_csv('dataset/dataset.csv')
 
 x = dataset['input_x']
 y = dataset['output_y']
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.20)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=validation_size)
+
+
+#################
+# Training loop #
+#################
 
 model = Sequential([
-    Dense(1, activation = 'linear',  input_dim = 1),
+    Dense(neurons, activation = 'linear',  input_dim = 1),
 ])
 
 model.compile(optimizer = 'adam', loss = 'mean_squared_error')
 
-# 100% = batch_size = 1 e epochs = 15
-model.fit(x_train, y_train, batch_size = 1, epochs = 15)
+model.fit(x_train, y_train, batch_size = batch_size, epochs = epochs)
 
 # weight = 1, bias = 2
-# modelo multiplica a entrada pelo weight (1) e soma o bias no final (2) resultando em um x + 2 = y
+# The model multiplies the input by the weight (1) and adds the bias at the end (2), resulting in x+2 = y.
 weights, bias = model.layers[0].get_weights()
+print(f"Weights: {weights}, bias: {bias}")
 
 predicts = model.predict(x_test)
 
 precision = accuracy_score(y_test, predicts) * 100
-
-simple = model.predict((0,5))
-
-
-
-
-
-
+print(f"Model accuracy: {precision}")
